@@ -28,21 +28,24 @@ import androidx.compose.ui.unit.dp
 import com.example.jokenpokemon.ui.components.PokemonLogo
 
 @Composable
-fun PlayerNameScreen (modifier: Modifier = Modifier) {
+fun PlayerNameScreen (
+    onStartGame: (String) -> Unit
+) {
 
     var playerName by remember { mutableStateOf("") }
-    var result by remember { mutableStateOf("") }
 
-    Column (modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp),
+    Column (
+        modifier = Modifier
+            .background(Color(0xFFFDF79B))
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
 
     ) {
         PokemonLogo()
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
             value = playerName,
@@ -53,16 +56,11 @@ fun PlayerNameScreen (modifier: Modifier = Modifier) {
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                if (playerName.isEmpty()){
-                    result = "Preencha todos os campos!"
-                }else{
-                    result = ""
-                }
-            },
+            onClick = { onStartGame(playerName)},
+            enabled = playerName.isNotBlank(),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Iniciar Batalha")
@@ -74,5 +72,7 @@ fun PlayerNameScreen (modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun PlayerNameScreenPreview() {
-    PlayerNameScreen()
+    PlayerNameScreen(){
+
+    }
 }
