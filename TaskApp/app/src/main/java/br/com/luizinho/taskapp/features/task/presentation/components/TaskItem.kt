@@ -19,7 +19,11 @@ import androidx.compose.ui.unit.dp
 import br.com.luizinho.taskapp.features.task.data.local.entity.Task
 
 @Composable
-fun TaskItem(task: Task, onDelete: () -> Unit) {
+fun TaskItem(
+    task: Task,
+    onDelete: () -> Unit
+
+) {
     Row(modifier = Modifier.fillMaxWidth()
         .clip(RoundedCornerShape(12.dp))
         .border(width = 1.dp,
