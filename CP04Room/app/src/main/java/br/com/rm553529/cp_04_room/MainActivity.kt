@@ -1,4 +1,4 @@
-package br.com.luizinho.taskapp
+package br.com.rm553529.cp_04_room
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
-import br.com.luizinho.taskapp.features.task.data.local.db.AppDatabase
-import br.com.luizinho.taskapp.features.task.data.local.repository.TaskRepository
-import br.com.luizinho.taskapp.features.task.presentation.screen.TaskScreen
-import br.com.luizinho.taskapp.features.task.presentation.screen.TaskViewModel
-import br.com.luizinho.taskapp.ui.theme.TaskAppTheme
+import br.com.rm553529.cp_04_room.features.city.data.local.db.AppDataBase
+import br.com.rm553529.cp_04_room.features.city.data.local.repository.CityRepository
+import br.com.rm553529.cp_04_room.features.city.presentation.screen.CityScreen
+import br.com.rm553529.cp_04_room.features.city.presentation.screen.CityViewModel
+import br.com.rm553529.cp_04_room.ui.theme.CP04RoomTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,15 +24,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val db = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java,
+            AppDataBase::class.java,
             "city_db"
         ).build()
-        val repository = CityRepository(db.)
+        val repository = CityRepository(db.cityDao())
         val viewModel = CityViewModel(repository)
         setContent {
-            TaskAppTheme {
-                TaskScreen(viewModel)
+            CP04RoomTheme {
+                CityScreen(viewModel)
             }
         }
     }
 }
+

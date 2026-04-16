@@ -1,4 +1,4 @@
-package br.com.luizinho.taskapp.features.task.presentation.screen
+package br.com.rm553529.cp_04_room.features.city.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,19 +32,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.com.luizinho.taskapp.features.task.presentation.components.EmptyState
-import br.com.luizinho.taskapp.features.task.presentation.components.TaskItem
-import br.com.luizinho.taskapp.features.task.presentation.components.TaskListHeader
+import br.com.rm553529.cp_04_room.features.city.data.local.entity.City
+import br.com.rm553529.cp_04_room.features.city.presentation.components.CityItem
+import br.com.rm553529.cp_04_room.features.city.presentation.components.CityListHeader
+import br.com.rm553529.cp_04_room.features.city.presentation.components.EmptyState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskScreen(viewModel: TaskViewModel) {
-    var text by remember { mutableStateOf("") }
-    val tasks by viewModel.tasks.collectAsState(initial = emptyList())
+fun CityScreen(viewModel: CityViewModel) {
+    var title by remember { mutableStateOf("") }
+    var desc by remember { mutableStateOf("") }
+    val citys by viewModel.citys.collectAsState(initial = emptyList())
     var showDialog by remember { mutableStateOf(false) }
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text("📝Minhas tarefas ") },
+            title = { Text(" Cidades Visitadas ") },
             actions = {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
@@ -56,6 +58,7 @@ fun TaskScreen(viewModel: TaskViewModel) {
         )
     }
     ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -64,9 +67,19 @@ fun TaskScreen(viewModel: TaskViewModel) {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    label = { Text("Nova tarefa") },
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Nova cidade") },
+                    leadingIcon = {
+                        Icon(Icons.Default.Edit, contentDescription = null)
+                    },
+                    modifier = Modifier.weight(1f),
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = desc,
+                    onValueChange = { desc = it },
+                    label = { Text("Descrição da cidade") },
                     leadingIcon = {
                         Icon(Icons.Default.Edit, contentDescription = null)
                     },
@@ -75,9 +88,10 @@ fun TaskScreen(viewModel: TaskViewModel) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = {
-                    if (text.isNotEmpty()) {
-                        viewModel.addTask(text)
-                        text = ""
+                    if (title.isNotEmpty()) {
+                        viewModel.addCity(title = title, desc = desc)
+                        title = ""
+                        desc = ""
                     }
                 }
                 ) { Icon(Icons.Default.Add, contentDescription = null) }
@@ -85,18 +99,18 @@ fun TaskScreen(viewModel: TaskViewModel) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            if (tasks.isEmpty()) {
+            if (citys.isEmpty()) {
                 EmptyState()
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     item {
-                        TaskListHeader(tasks.size)
+                        CityListHeader(citys.size)
                     }
-                    items(tasks) { task ->
-                        TaskItem(
-                            task = task,
+                    items(citys) { City ->
+                        CityItem(
+                            city = City,
                             onDelete = {
-                                viewModel.removeTask(task)
+                                viewModel.removeCity(city)
                             }
                         )
                     }
@@ -105,25 +119,26 @@ fun TaskScreen(viewModel: TaskViewModel) {
         }
     }
 
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                confirmButton = {
-                    TextButton(onClick = {
-                        viewModel.clearAllTasks()
-                        showDialog = false
-                    }
-                    ) { Text("Confirmar") }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = { showDialog = false }
-                    ) { Text("Cancelar") }
-                },
-                title = { Text("Excluir tudo") },
-                text = { Text("Deseja apagar todas as tarefas?") }
-            )
-        }
 
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.clearAllCitys()
+                    showDialog = false
+                }
+                ) { Text("Confirmar") }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) { Text("Cancelar") }
+            },
+            title = { Text("Excluir tudo") },
+            text = { Text("Deseja apagar todas as cidades?") }
+        )
     }
+
 }
+
